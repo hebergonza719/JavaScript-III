@@ -40,6 +40,7 @@ function CharacterStats(attr) {
 
 CharacterStats.prototype = Object.create(GameObject.prototype); //this goes before object prototype
 
+
 CharacterStats.prototype.takeDamage = function() { //this goes after the Object.create(Parent.prototype)
   return `${this.name} took damage.`;
 }
@@ -154,3 +155,71 @@ Humanoid.prototype.greet = function() {
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+
+
+  // Villian Constructor
+  function Villian(attr) {
+    Humanoid.call(this, attr);
+    this.specialAbility = attr.specialAbility;
+  }
+
+  Villian.prototype = Object.create(Humanoid.prototype);
+
+  Villian.prototype.fireBall = function() {
+    return (`${this.name} has casted a fireball.`)
+  };
+
+
+  // Hero Constructor
+  function Hero(attr) {
+    Humanoid.call(this, attr);
+    this.specialAbility = attr.specialAbility;
+    this.invisible = function() {
+      return `${this.name} has become invisible.`;
+    };
+  }
+
+  Hero.prototype = Object.create(Humanoid.prototype);
+
+ 
+  const warlock = new Villian({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4
+    },
+    healthPoints: 100,
+    name: 'Saruman',
+    team: 'Forest Kingdom',
+    weapons: [
+      'Staff',
+      'Dagger'
+    ],
+    language: 'Spanish',
+    specialAbility: "Cast Spells"
+  });
+
+const hobbit = new Hero({
+  createdAt: new Date(),
+  dimensions: {
+    length: 1,
+    width: 2,
+    height: 1
+  },
+  healthPoints: 5,
+  name: 'Frodo',
+  team: 'Forest Kingdom',
+  weapons: [
+    'Sting',
+    'Ring'
+  ],
+  language: 'English',
+  specialAbility: "Become invisible"  
+});
+
+
+console.log(hobbit.invisible());
+
+console.log(warlock.fireBall());
+

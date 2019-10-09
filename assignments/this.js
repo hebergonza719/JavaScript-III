@@ -11,7 +11,8 @@ makes reference to the object holding a function.
 constructor function.
 
 * 4. Explicit binding - Whenever the call() or apply() methods is used on an object or its method,
-the pronoun "this" is implied from the origin object.
+the pronoun "this" refers to the origin object. It's like the object it's called upon is using a mask,
+of a disguise.
 
 *
 * write out a code example of each explanation above
