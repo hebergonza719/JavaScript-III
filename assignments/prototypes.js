@@ -16,12 +16,46 @@
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 
+function GameObject(attr) {
+  this.createdAt = attr.createdAt;
+  this.name = attr.name;
+  this.dimensions = attr.dimensions;
+}
+
+GameObject.prototype.destroy = function() {
+  return `${this.name} was removed from the game.`;
+}
+
 /*
   === CharacterStats ===
   * healthPoints
   * takeDamage() // prototype method -> returns the string '<object name> took damage.'
   * should inherit destroy() from GameObject's prototype
 */
+
+function CharacterStats(attr) {
+  GameObject.call(this, attr);
+  this.healthPoints = attr.healthPoints;
+}
+
+CharacterStats.prototype = Object.create(GameObject.prototype); //this goes before object prototype
+
+
+CharacterStats.prototype.takeDamage = function() { //this goes after the Object.create(Parent.prototype)
+  return `${this.name} took damage.`;
+}
+
+// The test below was successful when creating an instance of CharacterStat()
+
+// let test = new CharacterStats({
+//   createdAt: new Date(),
+//   dimensions: {length: 2,width: 1, height: 1},
+//   healthPoints: 5,
+//   name: 'Bruce',
+//   });
+
+// console.log(test);
+
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -32,6 +66,19 @@
   * should inherit destroy() from GameObject through CharacterStats
   * should inherit takeDamage() from CharacterStats
 */
+
+function Humanoid(attr) {
+  CharacterStats.call(this, attr);
+  this.team = attr.team;
+  this.weapons = attr.weapons;
+  this.language = attr.language;
+}
+
+Humanoid.prototype = Object.create(CharacterStats.prototype);
+
+Humanoid.prototype.greet = function() {
+  return `${this.name} offers a greeting in ${this.language}.`;
+}
  
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
@@ -41,13 +88,13 @@
 
 // Test you work by un-commenting these 3 objects and the list of console logs below:
 
-/*
+
   const mage = new Humanoid({
     createdAt: new Date(),
     dimensions: {
       length: 2,
       width: 1,
-      height: 1,
+      height: 1
     },
     healthPoints: 5,
     name: 'Bruce',
@@ -63,7 +110,7 @@
     dimensions: {
       length: 2,
       width: 2,
-      height: 2,
+      height: 2
     },
     healthPoints: 15,
     name: 'Sir Mustachio',
@@ -80,7 +127,7 @@
     dimensions: {
       length: 1,
       width: 2,
-      height: 4,
+      height: 4
     },
     healthPoints: 10,
     name: 'Lilith',
@@ -102,9 +149,77 @@
   console.log(archer.greet()); // Lilith offers a greeting in Elvish.
   console.log(mage.takeDamage()); // Bruce took damage.
   console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
-*/
+
 
   // Stretch task: 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+
+
+  // Villian Constructor
+  function Villian(attr) {
+    Humanoid.call(this, attr);
+    this.specialAbility = attr.specialAbility;
+  }
+
+  Villian.prototype = Object.create(Humanoid.prototype);
+
+  Villian.prototype.fireBall = function() {
+    return (`${this.name} has casted a fireball.`)
+  };
+
+
+  // Hero Constructor
+  function Hero(attr) {
+    Humanoid.call(this, attr);
+    this.specialAbility = attr.specialAbility;
+    this.invisible = function() {
+      return `${this.name} has become invisible.`;
+    };
+  }
+
+  Hero.prototype = Object.create(Humanoid.prototype);
+
+ 
+  const warlock = new Villian({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4
+    },
+    healthPoints: 100,
+    name: 'Saruman',
+    team: 'Forest Kingdom',
+    weapons: [
+      'Staff',
+      'Dagger'
+    ],
+    language: 'Spanish',
+    specialAbility: "Cast Spells"
+  });
+
+const hobbit = new Hero({
+  createdAt: new Date(),
+  dimensions: {
+    length: 1,
+    width: 2,
+    height: 1
+  },
+  healthPoints: 5,
+  name: 'Frodo',
+  team: 'Forest Kingdom',
+  weapons: [
+    'Sting',
+    'Ring'
+  ],
+  language: 'English',
+  specialAbility: "Become invisible"  
+});
+
+
+console.log(hobbit.invisible());
+
+console.log(warlock.fireBall());
+
